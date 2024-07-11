@@ -20,7 +20,7 @@ base_router = Router()
 
 async def process_users():
     global users
-    sleep_time_in_seconds: int = 300
+    sleep_time_in_seconds: int = 3600
     while True:
         for chat_id, user in users.items():
             if not user["is_checking"]:
