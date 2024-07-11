@@ -147,8 +147,8 @@ async def add_location(message: Message, command: CommandObject):
         location: tuple[float, float] = (float(latitude), float(longitude))
 
         if (location[0] < -90) or (location[0] > 90):
-                    await message.answer("Широта должна быть в диапазоне от -90 до 90")
-                    return
+            await message.answer("Широта должна быть в диапазоне от -90 до 90")
+            return
         
         if (location[1] < -180) or (location[1] > 180):
             await message.answer("Широта должна быть в диапазоне от -180 до 180")
