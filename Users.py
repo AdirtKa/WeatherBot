@@ -54,7 +54,7 @@ async def name_is_received(message: Message, state: FSMContext):
         return
 
     await state.update_data(username=message.text.lower())
-    await message.reply("Отлично, теперь добавьте геопозицию локации двумя координатами через запятую."
+    await message.reply("Отлично, теперь добавьте геопозицию локации двумя координатами (широта, долгота) через запятую."
                         "Как разделитель дробной части используйте точку")
     await state.set_state(StateUser.location)
 
@@ -69,6 +69,15 @@ async def location_is_received(message: Message, state: FSMContext):
 
     try:
         parsed_location: tuple = tuple(float(x) for x in location)
+
+        if (parsed_location[0] < -90) or (parsed_location[0] > 90):
+            await message.answer("Широта должна быть в диапазоне от -90 до 90")
+            return
+        
+        if (parsed_location[1] < -180) or (parsed_location[1] > 180):
+            await message.answer("Широта должна быть в диапазоне от -180 до 180")
+            return
+
         await state.update_data(location=parsed_location)
         await add_user(message.chat.id, state)
         await message.answer("Вы добавлены")
@@ -136,6 +145,15 @@ async def add_location(message: Message, command: CommandObject):
     latitude, longitude = command.args.split(",", maxsplit=1)
     try:
         location: tuple[float, float] = (float(latitude), float(longitude))
+
+        if (location[0] < -90) or (location[0] > 90):
+                    await message.answer("Широта должна быть в диапазоне от -90 до 90")
+                    return
+        
+        if (location[1] < -180) or (location[1] > 180):
+            await message.answer("Широта должна быть в диапазоне от -180 до 180")
+            return
+
         users[chat_id]["locations"].append(location)
         save_users()
         await message.reply("Локация добавлена")
