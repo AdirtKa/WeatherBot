@@ -137,6 +137,7 @@ async def add_location(message: Message, command: CommandObject):
     chat_id = message.chat.id
     if chat_id not in users:
         await message.reply("Вы еще не зарегистрированы. Пожалуйста, начните с команды /start.")
+        
 
     if command.args is None:
         await message.answer("Не переданы аргументы")
